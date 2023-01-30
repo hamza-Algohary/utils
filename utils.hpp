@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <map>
+#include <boost/process.hpp>
 #include "Text.hpp"
 
 #include "macros.hpp"
@@ -18,6 +19,21 @@ inline void limit_bounds(T &var , T min , T max){
     if(var<min) var = min;
     else if(var>max) var = max;
 }
+
+inline My::Text spawn(std::string command){
+    using namespace boost::process;
+    ipstream stream;
+    child c(command , std_out > stream);
+    return My::Text(stream);
+} 
+
+const std::string CMD_LIST_FILTERS = "pkcon get-filters",
+                  CMD_LIST_GROUPS = "pkcon get-groups",
+                  CMD_SEARCH = "pkcon search ",
+                  CMD_INSTALL = "pkcon install ",
+                  CMD_UNINSTALL= "pkcon uninstall ",
+                  CMD_DETAILS = "pkcon details ";
+
 
 
 struct QuickStringStream : public std::string{
@@ -96,12 +112,14 @@ public:
         folders.push_back(name);
     }
     inline void check(){
+        using namespace std::filesystem;
+
         for(auto folder : folders){
-            fs::create_directories(folder);
+            create_directories(folder);
         }
         for(auto file:files){
-            fs::create_directories(fs::path(file.first).parent_path());
-            if(!fs::exists(file.first)){
+            create_directories(path(file.first).parent_path());
+            if(!exists(file.first)){
                 std::ofstream fout(file.first);
                 if (!fout.is_open()){
                     std::cerr /*<< termcolor::red*/ << "Warning! " /*<< termcolor::reset*/ << "Unable to access " << file.first << " falling back to default configuration.";
