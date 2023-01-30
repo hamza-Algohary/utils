@@ -27,15 +27,6 @@ inline My::Text spawn(std::string command){
     return My::Text(stream);
 } 
 
-const std::string CMD_LIST_FILTERS = "pkcon get-filters",
-                  CMD_LIST_GROUPS = "pkcon get-groups",
-                  CMD_SEARCH = "pkcon search ",
-                  CMD_INSTALL = "pkcon install ",
-                  CMD_UNINSTALL= "pkcon uninstall ",
-                  CMD_DETAILS = "pkcon details ";
-
-
-
 struct QuickStringStream : public std::string{
     //QuickStringStream(){}
     //QuickStringStream(std::string str){this->append(str);}
