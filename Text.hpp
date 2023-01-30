@@ -141,6 +141,12 @@ public:
         ss << c;
         source = ss.str();
     }
+    inline Text(const auto &stream){
+        std::stringstream ss;
+        ss << stream.rdbuf();
+        source = ss.str();
+        original_source = ss.str();
+    }
     inline Text()=default;
     inline Text original() const {
         return Text (original_source);
